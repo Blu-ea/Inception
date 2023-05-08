@@ -1,0 +1,27 @@
+service : 
+
+  nginx :
+    container_name : Nginx
+    build : ./requirements/nginx
+    network :
+      - my_network
+
+  wordpress :
+    container_name : Word_Press
+    env_file : .env
+    depends_on :
+      - mariadb 
+      - nginx 
+    build : ./requirements/wordpress
+    network :
+      - my_network
+
+  mariadb :
+    container_name : Maria_DB
+    env_file : .env
+    build : ./requirements/
+    network :
+      - my_network
+
+
+network :
