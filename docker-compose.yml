@@ -1,27 +1,62 @@
-service : 
+version: '3.3'
 
-  nginx :
-    container_name : Nginx
-    build : ./requirements/nginx
-    network :
-      - my_network
+volumes:
+  volume-mariadb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o:    'bind'
+      device: :/home/amiguez/data/mariadb
+  # V_wordpress:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o:    'bind'
+  #     device: /home/amiguez/data/wordpress
 
-  wordpress :
-    container_name : Word_Press
-    env_file : .env
-    depends_on :
-      - mariadb 
-      - nginx 
-    build : ./requirements/wordpress
-    network :
-      - my_network
+services:
 
-  mariadb :
-    container_name : Maria_DB
-    env_file : .env
-    build : ./requirements/
-    network :
-      - my_network
+  mariadb:
+    container_name: Maria_DB
+    build: 
+      context: ./requirements/mariadb
+      args:
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+    env_file: ".env"
+    volumes: 
+      - volume-mariadb:/var/lib/mysql
+    networks:
+      - Docker_Network
+    restart: always
 
+  ##############
 
-network :
+  # wordpress:
+  #   container_name: Word_Press
+  #   env_file: .env
+  #   depends_on:
+  #     - mariadb 
+  #   build: ./requirements/wordpress
+  #   volumes:
+  #     - V_wordpress
+  #   networks:
+  #     - Docker_Network
+  #    restart: always
+
+  ##############
+
+  # nginx:
+  #   container_name: Nginx
+  #   build: ./requirements/nginx
+  #   depends_on:
+  #     - wordpress
+  #   networks:
+  #     - Docker_Network
+  #    restart: always
+
+networks:
+  Docker_Network:
+    driver: bridge
