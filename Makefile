@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amiguez <amiguez@student.42lyon.fr>        +#+  +:+       +#+         #
+#    By: bluwu <bluwu@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/05/08 12:24:29 by amiguez           #+#    #+#              #
-#    Updated: 2023/05/12 03:02:08 by amiguez          ###   ########.fr        #
+#    Created: 2023/05/08 12:24:29 by bluwu           #+#    #+#              #
+#    Updated: 2023/05/19 16:03:27 by bluwu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,8 @@ prune: down
 	docker system prune -a -f
 
 volumes :
-	mkdir -p /home/amiguez/data/wordpress
-	mkdir -p /home/amiguez/data/mariadb
+	mkdir -p ~/data/wordpress
+	mkdir -p ~/data/mariadb
 
 .PHONY : all up down build ps prune
 .SILENT: 

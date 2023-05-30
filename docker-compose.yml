@@ -1,33 +1,33 @@
 version: '3.3'
 
-volumes:
-  volume-mariadb:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o:    'bind'
-      device: :/home/amiguez/data/mariadb
+# volumes:
+  # volume-mariadb:
+  #   driver: local
+  #   driver_opts:
+  #     type: 'none'
+  #     o:    'bind'
+  #     device: ${HOME}/data/mariadb
   # V_wordpress:
   #   driver: local
   #   driver_opts:
   #     type: 'none'
   #     o:    'bind'
-  #     device: /home/amiguez/data/wordpress
+  #     device: ${HOME}/data/wordpress
 
 services:
 
   mariadb:
     container_name: Maria_DB
+    env_file: ./.env
     build: 
       context: ./requirements/mariadb
       args:
-        - MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE
-        - MYSQL_USER
-        - MYSQL_PASSWORD
-    env_file: ".env"
+      - WORDPRESS_DB_NAME
+      - MARIADB_ROOT_PASSWD
+      - WORDPRESS_DB_USER
+      - WORDPRESS_DB_PASSWORD
     volumes: 
-      - volume-mariadb:/var/lib/mysql
+      - ${HOME}/data/mariadb:/var/lib/mysql
     networks:
       - Docker_Network
     restart: always
@@ -36,15 +36,15 @@ services:
 
   # wordpress:
   #   container_name: Word_Press
-  #   env_file: .env
-  #   depends_on:
-  #     - mariadb 
   #   build: ./requirements/wordpress
+  #   env_file: .env
   #   volumes:
   #     - V_wordpress
+  #   depends_on:
+  #     - mariadb 
   #   networks:
   #     - Docker_Network
-  #    restart: always
+  #   restart: always
 
   ##############
 
