@@ -34,17 +34,23 @@ services:
 
   ##############
 
-  # wordpress:
-  #   container_name: Word_Press
-  #   build: ./requirements/wordpress
-  #   env_file: .env
-  #   volumes:
-  #     - V_wordpress
-  #   depends_on:
-  #     - mariadb 
-  #   networks:
-  #     - Docker_Network
-  #   restart: always
+  wordpress:
+    container_name: Word_Press
+    build: 
+      context: ./requirements/wordpress
+      args:
+      -  WORDPRESS_DB_NAME
+      -  WORDPRESS_DB_USER
+      -  WORDPRESS_DB_PASSWORD
+      -  WORDPRESS_DB_HOST
+    env_file: .env
+    volumes:
+      - ${HOME}/data/wordpress:/var/www/html
+    depends_on:
+      - mariadb 
+    networks:
+      - Docker_Network
+    restart: always
 
   ##############
 

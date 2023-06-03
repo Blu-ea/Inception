@@ -1,4 +1,4 @@
-FROM	debian:buster
+FROM	debian:buster-slim
 
 ARG		WORDPRESS_DB_NAME
 ARG		MARIADB_ROOT_PASSWD
