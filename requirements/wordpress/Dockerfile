@@ -30,4 +30,4 @@ EXPOSE 9000 3306
 
 COPY ./tools/launch_wp.sh /tmp/entrypoint.sh
 
-# ENTRYPOINT [ "sh", "/tmp/entrypoint.sh" ]
+ENTRYPOINT [ "sh", "/tmp/entrypoint.sh" ]
