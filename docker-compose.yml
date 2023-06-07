@@ -44,6 +44,9 @@ services:
       -  WORDPRESS_DB_PASSWORD
       -  WORDPRESS_DB_HOST
     env_file: .env
+    ports:
+      - 9000
+      - 3306
     volumes:
       - ${HOME}/data/wordpress:/var/www/html
     depends_on:
@@ -54,14 +57,16 @@ services:
 
   ##############
 
-  # nginx:
-  #   container_name: Nginx
-  #   build: ./requirements/nginx
-  #   depends_on:
-  #     - wordpress
-  #   networks:
-  #     - Docker_Network
-  #    restart: always
+  nginx:
+    container_name: Nginx
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    networks:
+      - Docker_Network
+    restart: always
 
 networks:
   Docker_Network:
