@@ -1,18 +1,18 @@
 version: '3.3'
 
-# volumes:
-  # volume-mariadb:
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o:    'bind'
-  #     device: ${HOME}/data/mariadb
-  # V_wordpress:
-  #   driver: local
-  #   driver_opts:
-  #     type: 'none'
-  #     o:    'bind'
-  #     device: ${HOME}/data/wordpress
+volumes:
+  V_mariadb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o:    'bind'
+      device: ${HOME}/data/mariadb
+  V_wordpress:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o:    'bind'
+      device: ${HOME}/data/wordpress
 
 services:
 
@@ -27,7 +27,7 @@ services:
       - WORDPRESS_DB_USER
       - WORDPRESS_DB_PASSWORD
     volumes: 
-      - ${HOME}/data/mariadb:/var/lib/mysql
+      - V_mariadb:/var/lib/mysql
     networks:
       - Docker_Network
     restart: always
@@ -48,7 +48,7 @@ services:
       - 9000
       - 3306
     volumes:
-      - ${HOME}/data/wordpress:/var/www/html
+      - V_wordpress:/var/www/html
     depends_on:
       - mariadb 
     networks:
@@ -59,7 +59,8 @@ services:
 
   nginx:
     container_name: Nginx
-    build: ./requirements/nginx
+    build: 
+      context: ./requirements/nginx
     depends_on:
       - wordpress
     ports:

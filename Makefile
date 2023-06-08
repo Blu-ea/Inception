@@ -42,5 +42,9 @@ volumes :
 	mkdir -p ~/data/wordpress
 	mkdir -p ~/data/mariadb
 
-.PHONY : all up down build ps prune
+re : down up
+
+reprune : prune up
+
+.PHONY : all up down build ps prune re volumes create clean reprune
 .SILENT: 
