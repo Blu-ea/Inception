@@ -1,5 +1,7 @@
 FROM	debian:buster-slim
 
+# ENV DEBIAN_FRONTEND=noninteractive
+
 RUN	apt-get update -y	\
 &&	apt-get upgrade -y
 
@@ -14,6 +16,9 @@ RUN		mkdir -p /etc/nginx/ssl \
 		-subj "/C=FR/ST=Rhone/L=Lyon/O=42/CN=amgiguez.42.fr/emailAddress=amiguez@student.42lyon.fr"
 
 COPY	./tools/nginx.conf /etc/nginx/conf.d/amiguez.conf 
+# COPY	./tools/nginx.conf /etc/nginx/sites-available/amiguez.42.fr.conf
+# RUN		ln -s /etc/nginx/sites-available/amiguez.42.fr.conf /etc/nginx/sites-enabled/amiguez.42.fr.conf
+
 
 EXPOSE 443 9000
 

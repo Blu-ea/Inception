@@ -13,8 +13,10 @@
 # Check if .env is there and create it if not there and ask to fill it acordingly
 NAME := inception
 
-COMPOSE := docker compose -p $(NAME)
+COMPOSE := docker-compose -p $(NAME)
 
+# IMAGES = ''
+# VOLUMES = ''
 all : up
 
 up : build
@@ -30,21 +32,36 @@ create : build
 	$(COMPOSE) create
 
 ps :
-	docker compose ps --all
+	$(COMPOSE) ps --all
 
-clean : 
-	docker rmi 
+logs :
+	$(COMPOSE) logs
 
-prune: down
+conf :
+	$(COMPOSE) config
+
+clean : down
 	docker system prune -a -f
+
+fclean : clean 
+ifneq ($(shell docker images -q),)
+	echo "ERASE IMAGES ==========="
+	echo $(shell docker images -q)
+	docker rmi $(shell docker volume ls -q) 
+endif
+ifneq ($(shell docker volume ls -q),)
+	echo "ERASE VOLUMES ==========="
+	echo $(shell docker volume ls -q)
+	docker volume rm $(shell docker volume ls -q) 
+endif
 
 volumes :
 	mkdir -p ~/data/wordpress
 	mkdir -p ~/data/mariadb
 
-re : down up
+re : fclean up
 
 reprune : prune up
 
-.PHONY : all up down build ps prune re volumes create clean reprune
+.PHONY : all up down build ps prune re volumes create clean reprune conf logs
 .SILENT: 

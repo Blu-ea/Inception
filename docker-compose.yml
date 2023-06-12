@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 
 volumes:
   V_mariadb:
@@ -6,16 +6,17 @@ volumes:
     driver_opts:
       type: 'none'
       o:    'bind'
-      device: ${HOME}/data/mariadb
+      device: /home/$USER/data/mariadb
   V_wordpress:
     driver: local
     driver_opts:
       type: 'none'
       o:    'bind'
-      device: ${HOME}/data/wordpress
+      device: /home/$USER/data/wordpress
+  
+  ####    #######################
 
 services:
-
   mariadb:
     container_name: Maria_DB
     env_file: ./.env
@@ -35,7 +36,7 @@ services:
   ##############
 
   wordpress:
-    container_name: Word_Press
+    container_name: WordPress
     build: 
       context: ./requirements/wordpress
       args:
@@ -65,6 +66,8 @@ services:
       - wordpress
     ports:
       - "443:443"
+    volumes:
+      - V_wordpress:/var/www/html
     networks:
       - Docker_Network
     restart: always
