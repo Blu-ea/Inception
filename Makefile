@@ -25,6 +25,8 @@ up : build
 down :
 	$(COMPOSE) down
 
+reboot : down up
+
 build : volumes
 	$(COMPOSE) build --parallel
 
@@ -41,27 +43,23 @@ conf :
 	$(COMPOSE) config
 
 clean : down
-	docker system prune -a -f
+ifneq ($(shell docker images -q),)
+	docker rmi $(shell docker images -q) --force
+endif
 
 fclean : clean 
-ifneq ($(shell docker images -q),)
-	echo "ERASE IMAGES ==========="
-	echo $(shell docker images -q)
-	docker rmi $(shell docker volume ls -q) 
-endif
 ifneq ($(shell docker volume ls -q),)
-	echo "ERASE VOLUMES ==========="
-	echo $(shell docker volume ls -q)
-	docker volume rm $(shell docker volume ls -q) 
+	docker volume rm $(shell docker volume ls -q) --force
 endif
-
+	sudo rm -rf ~/data
 volumes :
 	mkdir -p ~/data/wordpress
 	mkdir -p ~/data/mariadb
 
 re : fclean up
 
-reprune : prune up
+prune : fclean
+	docker system prune --all --force
 
-.PHONY : all up down build ps prune re volumes create clean reprune conf logs
+.PHONY : all up down build ps prune re volumes create clean conf logs reboot
 .SILENT: 
